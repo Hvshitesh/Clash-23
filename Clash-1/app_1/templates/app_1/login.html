@@ -1,0 +1,30 @@
+{% extends 'app_1/base.html' %}
+
+{% block "codeblock" %}
+{% comment %} <h1>Prasad@123</h1> {% endcomment %}
+
+
+    <h1>Sign In</h1>
+
+    <form action="" method="POST">
+    {% csrf_token %}
+        <div>
+            <input type="radio" name="isTeam" id="Team" value="True">
+            <label for="Team">Team</label>
+            <input type="radio" name="isTeam" id="Individual" value="False" checked>
+            <label for="Individual">Individual</label>
+        </div>
+        <label for="">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        <br>
+
+        <label for="">Password</label>
+        <input type="password" id="pass1" name="pass1" placeholder="Enter your Password" required>
+        <br>
+
+        
+
+        <input type="submit" placeholder="Submit" class="btn btn-primary">
+    </form>
+
+{% endblock "codeblock" %}

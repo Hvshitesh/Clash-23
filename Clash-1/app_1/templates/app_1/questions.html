@@ -1,0 +1,129 @@
+{% extends 'app_1/base.html' %}
+{% block "title" %}
+{{title}}
+{% endblock "title" %}
+
+{% block "codeblock" %}
+<div class="navbar-brand navvi timer" href="#" style="margin-left: 20px;">
+    <div class="timer_container">
+        <div class=" w-100 d-flex p-0 flex-grow-1" id="countdown">
+            <span id="minutes" class="timeritems"></span> :
+            <span id="seconds" class="timeritems"></span>
+        </div>
+      </div>                     
+</div>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
+        <strong>Message:</strong>{{ message }}
+    </div>
+    {% endfor %}
+
+    <div>
+        <h1>marks : {{player.playerScore}}</h1>
+    </div>
+     <h1>Streak : {{playerStreak}} </h1>
+    <h1>Randomly generated question number = {{question.questionID}}</h1>
+    
+    <h1>marks = <span id="marks-add">+{{marking_scheme.marks_add}}</span> <span id="marks-red"> </span></h1>
+    
+<form action="" method="POST" id="Question_form">
+    {% csrf_token %}
+    <h2 id="question_number">{{question_number}})</h2> <h2 id = "question_title">&nbsp; {{question.questionText}}</h2>
+
+    <input type="radio" name="option" id="opt1" class="option" value=1>
+    <label for="opt1" id = "option1">
+        <span>{{question.questionOption1}}</span>
+    </label>
+    <input type="radio" name="option" id="opt2" class="option" value=2>
+    <label for="opt2" id = "option2">
+        <span>{{question.questionOption2}}</span>
+    </label>
+    <input type="radio" name="option" id="opt3" class="option" value=3>
+    <label for="opt3" id = "option3">
+        <span>{{question.questionOption3}}</span>
+    </label>
+    <input type="radio" name="option" id="opt4" class="option" value=4>
+    <label for="opt4" id = "option4">
+        <span>{{question.questionOption4}}</span>
+    </label>
+
+    {% if flag %}
+        <button   type="submit" name="next" id="submit_btn" class="btn btn-primary"  >Next</button>
+    {% else %}
+        <!-- <button   type="submit" name="nsubmit" id="submit_btn">Submit</button> -->
+        <button   type="submit" name="nsubmit" id="submit_btn" class="btn btn-primary">Submit</button>
+    {% endif %}
+</form>
+
+<!-- <button id="sub">dfdf</button> -->
+
+<div class="container">
+    <h3>Lifeline activation details</h3>
+    <button type="button" name="lifeline1" id="lifeline1btn" value=1 class="btn btn-primary" disabled>50/50 Lifeline1</button>
+    <button type="button" name="lifeline2" id="lifeline2btn" value=2 class="btn btn-primary" disabled>Lifeline2</button>
+    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" disabled>Lifeline3</button> 
+</div>
+<div class = 'chatBotResponse' id = 'chatBotResponse' style = "display: none">
+    <label for="chatBotInput">Enter Question ?</label><br>
+    <textarea type="text" id="chatBotInput" name="chatBotInput" rows="4" cols="50" > {{chatBotOutput.input}}  </textarea>
+
+    <input type="submit" value="Ask TARS ?" id = "chatBotBtn">
+    <!-- {{chatBotOutput.input}} -->
+    <div id = 'chatBotAns'>
+        ans : {{chatBotOutput.output}}
+    </div>
+</div>
+<!-- for 2nd lifeline -->
+<div id="question_modal">
+</div>
+
+<script>
+    
+    x = setInterval(function() {    
+        
+        const countDown = new Date('{{player_time}}').getTime();
+            const now = new Date().getTime();
+            // console.log(new Date())
+            remain = countDown - now;
+            // console.log("b time",countDown,"f time", now ) 
+            // console.log(remain);
+  
+        //   document.getElementById("days").innerText = Math.floor(distance / (day)),
+            let seconds = Math.floor((remain / 1000) % 60);
+            let minutes = Math.floor((remain / (1000 * 60)) % 60);
+            document.getElementById("minutes").innerText = minutes;
+            // sec = toString(seconds)
+            // console.log(val_sec)
+            if (seconds<10 ){
+                document.getElementById("seconds").innerText =  "0"+seconds ;
+            }else{
+                document.getElementById("seconds").innerText = seconds ;
+            }  
+          if (remain < 0) {
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach((input) => {
+            input.required = false;
+            
+            });
+            // document.getElementById("hours").innerText = 0;
+            document.getElementById("minutes").innerText = 0;
+            document.getElementById("seconds").innerText = 0;
+            var sub_btn = document.getElementById("submit_btn");
+            sub_btn.name = "nsubmit";
+            sub_btn.click();
+            clearInterval(x);
+            // window.location.reload();
+          }
+          //seconds
+        },0)  
+</script>
+
+{% comment %} <script>
+    document.getElementById("submit_btn").addEventListener("click",(e)=>{
+        e.target.disabled= true;
+    })
+</script> {% endcomment %}
+
+
+    {% include "ajax/questionsAjax.html" %}
+{% endblock "codeblock" %}
